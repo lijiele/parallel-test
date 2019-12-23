@@ -40,7 +40,7 @@ sys	0m0.006s
 
 I did a benchmark on my laptop, and the data was collected below.
 
-* The computer, CPU: 2.7 GHz Intel Core i7, Memory: 16 GB 1600 MHz DDR3
+* The computer, CPU: `2.7 GHz Intel Core i7`, Memory: `16 GB 1600 MHz DDR3`
 * Jvm parameters, `-Xms1G -Xmx2G`
 * Use [Apache Benchmark](https://httpd.apache.org/docs/2.4/programs/ab.html) to request the apis with two specs. `-c 10 -n 200` is currency 10 and total number 200 requests, and `-c 100 -n 2000` is currency 100 and total number 2000 requests
 
@@ -73,3 +73,7 @@ With `-c 10 -n 200`, time taken for tests:   `43.726 seconds`
 ![reactive-c10-n200](src/docs/images/reactive-c10-n200.png)
 With `-c 100 -n 2000`, time taken for tests:   `71.388 seconds`
 ![reactive-c100-n2000](src/docs/images/reactive-c100-n2000.png)
+
+# Further work
+* Why does the total of the thread increased so much in Parallel call? Is it the problem of the implementation(okhttp) or the architecture?
+* Is it possible to decrease the programming complexity in parallel and reactive class?
