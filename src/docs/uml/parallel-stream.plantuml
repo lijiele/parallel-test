@@ -1,4 +1,5 @@
 @startuml
+title Sequence diagram of Parallel and Stream combined apis
 participant "para-combined-api" as seq
 participant "slow-api1" as api1
 participant "slow-api2" as api2
