@@ -1,0 +1,14 @@
+@startuml
+participant "para-combined-api" as seq
+participant "slow-api1" as api1
+participant "slow-api2" as api2
+seq -> api1: Requests slow api1
+seq -> api2: Requests slow api2
+activate seq
+note left
+Total time consumed
+end note
+api1 --> seq: Slow api1 returns the result to seq-combined-api
+api2 --> seq: Slow api2 returns the result to seq-combined-api
+deactivate seq
+@enduml
