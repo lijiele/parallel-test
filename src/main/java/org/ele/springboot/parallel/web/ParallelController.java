@@ -20,10 +20,11 @@ import java.io.IOException;
 public class ParallelController {
     private static final Logger LOG = LoggerFactory.getLogger(ParallelController.class);
 
+    private OkHttpClient client = new OkHttpClient();
     @RequestMapping(value = "/combined")
     @ResponseBody
     public String combined() throws IOException, ServletException, InterruptedException {
-        OkHttpClient client = new OkHttpClient();
+
         Request request = new Request.Builder().url(String.format(Utils.URL_TPL, 1)).build();
         Call call = client.newCall(request);
         ParallelContentHolder pch = new ParallelContentHolder();
@@ -37,6 +38,7 @@ public class ParallelController {
                 pch.setCall1Content(response.body().string());
                 pch.setCall1Flag(true);
                 LOG.info("content:{}", pch.getCall1Content());
+                response.body().close();
             }
         });
         Request request2 = new Request.Builder().url(String.format(Utils.URL_TPL, 2)).build();
@@ -51,6 +53,7 @@ public class ParallelController {
                 pch.setCall2Content(response.body().string());
                 pch.setCall2Flag(true);
                 LOG.info("content:{}", pch.getCall2Content());
+                response.body().close();
             }
         });
         while(!(pch.isCall1Flag() && pch.isCall2Flag())) {

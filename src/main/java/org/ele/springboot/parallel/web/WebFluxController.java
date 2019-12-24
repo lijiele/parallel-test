@@ -21,12 +21,13 @@ public class WebFluxController {
     public Mono<String> test() throws IOException, ServletException, InterruptedException {
         return Mono.just("test");
     }
+    private WebClient client = WebClient.create();
     @RequestMapping(value = "/combined")
     @ResponseBody
     public Mono<String> combined() throws IOException, ServletException, InterruptedException {
 
         ParallelContentHolder pch = new ParallelContentHolder();
-        WebClient client = WebClient.create();
+
         Mono<String> result =
                 client.get().uri(String.format(Utils.URL_TPL, 1)).accept(MediaType.APPLICATION_JSON_UTF8).retrieve()
                         .bodyToMono(String.class);
