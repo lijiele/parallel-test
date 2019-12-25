@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.util.Date;
 
 @Controller
 @RequestMapping("/webflux")
@@ -21,11 +23,15 @@ public class WebFluxController {
     public Mono<String> test() throws IOException, ServletException, InterruptedException {
         return Mono.just("test");
     }
-    private WebClient client = WebClient.create();
+    private WebClient client;
+    @PostConstruct
+    public void init() {
+        client = WebClient.create();
+    }
     @RequestMapping(value = "/combined")
     @ResponseBody
     public Mono<String> combined() throws IOException, ServletException, InterruptedException {
-
+        long start = (new Date()).getTime();
         ParallelContentHolder pch = new ParallelContentHolder();
 
         Mono<String> result =
@@ -34,7 +40,7 @@ public class WebFluxController {
         result.subscribe(string -> {
             pch.setCall1Content(string);
             pch.setCall1Flag(true);
-            LOG.info("content1:{}", pch.getCall1Content());
+//            LOG.info("content1:{}", pch.getCall1Content());
         });
 
         Mono<String> result2 =
@@ -43,12 +49,13 @@ public class WebFluxController {
         result2.subscribe(string -> {
             pch.setCall2Content(string);
             pch.setCall2Flag(true);
-            LOG.info("content2:{}", pch.getCall2Content());
+//            LOG.info("content2:{}", pch.getCall2Content());
         });
         while (!(pch.isCall1Flag() && pch.isCall2Flag())) {
 //            LOG.info("flag1:{}, flag2:{}", pch.isCall1Flag(), pch.isCall2Flag());
             Thread.sleep(200);
         }
+        LOG.info("time elapse: {}ms", ((new Date()).getTime() - start));
         return Mono.just(Utils.combineContent(pch.getCall1Content(), pch.getCall2Content()));
     }
 }

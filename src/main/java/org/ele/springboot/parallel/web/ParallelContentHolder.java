@@ -1,16 +1,16 @@
 package org.ele.springboot.parallel.web;
 
 public class ParallelContentHolder {
-    private String call1Content = null;
-    private boolean call1Flag = false;
-    private String call2Content = null;
-    private boolean call2Flag = false;
+    private volatile String call1Content = null;
+    private volatile boolean call1Flag = false;
+    private volatile String call2Content = null;
+    private volatile boolean call2Flag = false;
 
     public String getCall1Content() {
         return call1Content;
     }
 
-    public void setCall1Content(String call1Content) {
+    public synchronized void setCall1Content(String call1Content) {
         this.call1Content = call1Content;
     }
 
@@ -18,7 +18,7 @@ public class ParallelContentHolder {
         return call1Flag;
     }
 
-    public void setCall1Flag(boolean call1Flag) {
+    public synchronized void setCall1Flag(boolean call1Flag) {
         this.call1Flag = call1Flag;
     }
 
@@ -26,7 +26,7 @@ public class ParallelContentHolder {
         return call2Content;
     }
 
-    public void setCall2Content(String call2Content) {
+    public synchronized void setCall2Content(String call2Content) {
         this.call2Content = call2Content;
     }
 
@@ -34,7 +34,7 @@ public class ParallelContentHolder {
         return call2Flag;
     }
 
-    public void setCall2Flag(boolean call2Flag) {
+    public synchronized void setCall2Flag(boolean call2Flag) {
         this.call2Flag = call2Flag;
     }
 }

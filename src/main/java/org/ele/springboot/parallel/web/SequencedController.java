@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.util.Date;
 
 @Controller
 @RequestMapping("/seq")
@@ -20,6 +21,7 @@ public class SequencedController {
     @RequestMapping(value = "/combined")
     @ResponseBody
     public String combined() throws IOException, ServletException {
+        long start = (new Date()).getTime();
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.exchange(String.format(Utils.URL_TPL, 1),
                 HttpMethod.GET, null, new ParameterizedTypeReference<String>() {
@@ -30,6 +32,7 @@ public class SequencedController {
                 HttpMethod.GET, null, new ParameterizedTypeReference<String>() {
                 });
         String result2 = response2.getBody();
+        LOG.info("time elapse: {}ms", ((new Date()).getTime() - start));
         return Utils.combineContent(result1, result2);
     }
 }
