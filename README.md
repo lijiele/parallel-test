@@ -77,3 +77,4 @@ With `-c 100 -n 2000`, time taken for tests:   `71.388 seconds`
 # Further work
 * Why does the total of the thread increased so much in Parallel call? Is it the problem of the implementation([okhttp](https://github.com/square/okhttp/)) or the architecture?
 * Is it possible to decrease the programming complexity in parallel and reactive class?
+* new version prepared
