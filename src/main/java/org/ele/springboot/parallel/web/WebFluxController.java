@@ -58,4 +58,22 @@ public class WebFluxController {
         LOG.info("time elapse: {}ms", ((new Date()).getTime() - start));
         return Mono.just(Utils.combineContent(pch.getCall1Content(), pch.getCall2Content()));
     }
+
+    @RequestMapping("/combined2")
+    @ResponseBody
+    public Mono<String> combined2() {
+        Mono<String> result =
+                client.get().uri(String.format(Utils.URL_TPL, 1))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .retrieve()
+                        .bodyToMono(String.class);
+
+        Mono<String> result2 =
+                client.get().uri(String.format(Utils.URL_TPL, 2))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .retrieve()
+                        .bodyToMono(String.class);
+
+        return result.zipWith(result2, Utils::combineContent);
+    }
 }
